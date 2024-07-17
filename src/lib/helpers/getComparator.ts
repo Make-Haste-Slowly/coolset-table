@@ -1,3 +1,5 @@
+import { Order } from "../../components/ui/TableHead";
+
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -9,7 +11,7 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
 }
 
 export function getComparator<Key extends keyof any>(
-  order: "asc" | "desc",
+  order: any,
   orderBy: any
 ): (
   a: { [key in Key]: number | string },

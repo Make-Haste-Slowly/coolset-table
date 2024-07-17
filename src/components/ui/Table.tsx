@@ -1,5 +1,6 @@
 import * as React from "react";
 import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import Box from "@mui/material/Box";
 import { default as MuiTable } from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -7,16 +8,15 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { CircularProgress, Typography } from "@mui/material";
+import { Alert } from "@mui/material";
 
 import EnhancedTableHead, { HeadCell, Order } from "./TableHead";
-import { stableSort } from "../../lib/helpers/stableSort";
-import { getComparator } from "../../lib/helpers/getComparator";
 import { DataType } from "../../api/data";
 
 interface TableProps<T extends DataType> {
   isLoading: boolean;
   data: T[];
+  count: number;
   headCells: HeadCell<T>[];
   page: number;
   order: Order;
@@ -27,8 +27,11 @@ interface TableProps<T extends DataType> {
   onRequestSort: (event: React.MouseEvent<unknown>, property: keyof T) => void;
 }
 
+const ROWS_PER_PAGE_OPTIONS = [10, 25, 50];
+
 export default function Table<T extends DataType>({
   data,
+  count,
   headCells,
   page,
   isLoading,
@@ -39,34 +42,18 @@ export default function Table<T extends DataType>({
   onChangeRowsPerPage,
   onRequestSort,
 }: TableProps<T>) {
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
-
-  const visibleRows = React.useMemo(
-    () =>
-      stableSort<T>(data, getComparator(order, orderBy)).slice(
-        page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage
-      ),
-    [order, orderBy, page, rowsPerPage, data]
-  );
+  const populatedRows = React.useMemo(() => data, [data]);
+  const rows = isLoading ? new Array(rowsPerPage).fill(0) : populatedRows;
 
   return (
     <>
-      {isLoading ? (
-        <Box
-          width="100%"
-          height="500px"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <CircularProgress />
-        </Box>
-      ) : data.length > 0 ? (
+      {isLoading || data.length > 0 ? (
         <>
-          <TableContainer>
+          <TableContainer
+            sx={{
+              height: "calc(100vh - 164px);",
+            }}
+          >
             <MuiTable
               stickyHeader
               sx={{ minWidth: 750 }}
@@ -79,7 +66,7 @@ export default function Table<T extends DataType>({
                 onRequestSort={onRequestSort}
               />
               <TableBody>
-                {visibleRows.map((row) => {
+                {rows.map((row) => {
                   return (
                     <TableRow
                       hover
@@ -103,20 +90,30 @@ export default function Table<T extends DataType>({
                               borderRight: `1px solid rgba(224, 224, 224, 1)`,
                             }}
                           >
-                            {row[cell.id] as React.ReactNode}
+                            {isLoading ? (
+                              <Skeleton count={1} />
+                            ) : (
+                              (row[cell.id] as React.ReactNode)
+                            )}
                           </TableCell>
                         );
                       })}
                     </TableRow>
                   );
                 })}
-                {emptyRows > 0 && (
+                {!isLoading && populatedRows.length !== rowsPerPage && (
                   <TableRow
-                    style={{
-                      height: 53 * emptyRows,
+                    sx={{
+                      height:
+                        53 * (ROWS_PER_PAGE_OPTIONS[0] - populatedRows.length),
+                      border: "none",
                     }}
                   >
-                    <TableCell colSpan={6} align="left" />
+                    <TableCell
+                      colSpan={6}
+                      align="left"
+                      sx={{ border: "none" }}
+                    />
                   </TableRow>
                 )}
               </TableBody>
@@ -130,8 +127,8 @@ export default function Table<T extends DataType>({
               justifySelf: "left",
               marginRight: "auto",
             }}
-            rowsPerPageOptions={[10, 25, 50]}
-            count={data.length}
+            rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
+            count={count}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={onChangePage}
@@ -141,12 +138,12 @@ export default function Table<T extends DataType>({
       ) : (
         <Box
           width="100%"
-          height="500px"
+          height="600px"
           display="flex"
           justifyContent="center"
           alignItems="center"
         >
-          <Typography>No data</Typography>
+          <Alert severity="info">No Data</Alert>
         </Box>
       )}
     </>

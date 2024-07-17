@@ -12,7 +12,7 @@ interface FilterProps {
   options: string[];
   placeholder: string;
   selectedOptions: string[];
-  setSelectedOptions: React.Dispatch<React.SetStateAction<string[]>>;
+  setSelectedOptions: (options: string[]) => void;
 }
 
 const ITEM_HEIGHT = 60;

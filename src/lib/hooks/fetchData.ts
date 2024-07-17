@@ -4,11 +4,11 @@ import { Order } from "../../components/ui/TableHead";
 import { filterData } from "../helpers/filterData";
 
 export interface IQueryParams<T> {
-  page?: number;
-  order?: Order;
-  orderBy?: keyof T;
+  page: number;
+  order: Order;
+  orderBy: keyof T;
   selectedSectionFilterOptions: string[];
-  rowsPerPage?: number;
+  rowsPerPage: number;
 }
 
 interface IFetchDataArgs<T> {
@@ -21,38 +21,36 @@ export const useFetchData = <T>({
   queryParameters,
 }: IFetchDataArgs<T>) => {
   const [data, setData] = React.useState<T[]>([]);
+  const [count, setCount] = React.useState<number>(0);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
   const { selectedSectionFilterOptions, order, orderBy, page, rowsPerPage } =
     queryParameters;
 
-  // Encapsulate data fetching logic into a separate function
-  const fetchData = React.useCallback(() => {
+  const fetchData = React.useCallback(async () => {
     console.log(`Fetching Data from ${url}...`);
     setIsLoading(true);
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(() => {
-          return filterData<T>({
-            selectedSectionFilterOptions,
-            order,
-            orderBy,
-            page,
-            rowsPerPage,
-          });
-        });
-        // }, 50000); // Simulate a 0.5 second delay
-      }, 500); // Simulate a 0.5 second delay
-    })
-      .then((res) => {
-        setData(res as any);
-        setIsLoading(false);
-      })
-      .catch((error: Error) => {
-        console.error("Error fetching data:", error);
-        setError(error.message);
-        setIsLoading(false);
+
+    try {
+      // Simulate a 0.5 second delay
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      const { data, count } = filterData<T>({
+        selectedSectionFilterOptions,
+        order,
+        orderBy,
+        page,
+        rowsPerPage,
       });
+
+      setData(data);
+      setCount(count);
+      setIsLoading(false);
+    } catch (error: any) {
+      console.error("Error fetching data:", error);
+      setError(error.message);
+      setIsLoading(false);
+    }
   }, [selectedSectionFilterOptions, order, orderBy, page, rowsPerPage, url]);
 
   // Fetch data on mount and when queryParameters changes
@@ -67,5 +65,5 @@ export const useFetchData = <T>({
     fetchData,
   ]);
 
-  return { data, error, isLoading, refetch: fetchData };
+  return { data, count, error, isLoading, refetch: fetchData };
 };

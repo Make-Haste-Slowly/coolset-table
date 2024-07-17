@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Box, Typography } from "@mui/material";
+import { Alert, Box, Typography } from "@mui/material";
 import Toolbar from "@mui/material/Toolbar";
 
 import Table from "../ui/Table";
@@ -8,6 +8,7 @@ import { HeadCell, Order } from "../ui/TableHead";
 import { getUniquePropertyValues } from "../../lib/helpers/getUniquePropertyValues";
 import { useFetchData } from "../../lib/hooks/fetchData";
 import { CalculatedGroceryItem, mappedGroceriesData } from "../../api/data";
+import Skeleton from "react-loading-skeleton";
 
 const headCells: HeadCell<CalculatedGroceryItem>[] = [
   {
@@ -52,7 +53,7 @@ export const GroceriesTable = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(DEFAULT_ROWS);
 
-  const { data, refetch, error, isLoading } =
+  const { data, count, refetch, error, isLoading } =
     useFetchData<CalculatedGroceryItem>({
       url: "/groceries",
       queryParameters: {
@@ -87,6 +88,11 @@ export const GroceriesTable = () => {
     setOrderBy(property);
   };
 
+  const handleSelectFilterOptions = (options: string[]) => {
+    setPage(0);
+    setSelectedFilterOptions(options);
+  };
+
   return (
     <Box sx={{ width: "100%" }}>
       <Toolbar
@@ -108,21 +114,34 @@ export const GroceriesTable = () => {
           placeholder="Filter by section"
           options={sectionFilterOptions}
           selectedOptions={selectedSectionFilterOptions}
-          setSelectedOptions={setSelectedFilterOptions}
+          setSelectedOptions={handleSelectFilterOptions}
         />
       </Toolbar>
-      <Table
-        data={data}
-        isLoading={isLoading}
-        headCells={headCells}
-        page={page}
-        order={order}
-        orderBy={orderBy}
-        rowsPerPage={rowsPerPage}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-        onRequestSort={handleRequestSort}
-      />
+      {!error ? (
+        <Table
+          data={data}
+          count={count}
+          isLoading={isLoading}
+          headCells={headCells}
+          page={page}
+          order={order}
+          orderBy={orderBy}
+          rowsPerPage={rowsPerPage}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+          onRequestSort={handleRequestSort}
+        />
+      ) : (
+        <Box
+          width="100%"
+          height="600px"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Alert severity="error">Error fetching groceries</Alert>
+        </Box>
+      )}
     </Box>
   );
 };

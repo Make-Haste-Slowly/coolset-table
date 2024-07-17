@@ -2,8 +2,7 @@ export interface DataType {
   id: number;
 }
 
-export interface GroceryItem {
-  id: number;
+export interface GroceryItem extends DataType {
   name: string;
   section: string;
   price: number;
