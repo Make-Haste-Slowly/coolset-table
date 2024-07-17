@@ -5,10 +5,10 @@ import Toolbar from "@mui/material/Toolbar";
 import Table from "../ui/Table";
 import { Filter } from "../ui/Filter";
 import { HeadCell, Order } from "../ui/TableHead";
+
 import { getUniquePropertyValues } from "../../lib/helpers/getUniquePropertyValues";
 import { useFetchData } from "../../lib/hooks/fetchData";
 import { CalculatedGroceryItem, mappedGroceriesData } from "../../api/data";
-import Skeleton from "react-loading-skeleton";
 
 const headCells: HeadCell<CalculatedGroceryItem>[] = [
   {
