@@ -1,4 +1,8 @@
-export interface RawGroceriesData {
+export interface DataType {
+  id: number;
+}
+
+export interface GroceryItem {
   id: number;
   name: string;
   section: string;
@@ -6,11 +10,11 @@ export interface RawGroceriesData {
   weight: number;
 }
 
-export interface GroceriesData extends RawGroceriesData {
+export interface CalculatedGroceryItem extends GroceryItem {
   pricePerWeight: string;
 }
 
-export const groceriesData: RawGroceriesData[] = [
+export const groceriesData: GroceryItem[] = [
   { id: 1, name: "Bananas", section: "Produce", price: 1.29, weight: 0.5 }, // 500g
   { id: 2, name: "Apples", section: "Produce", price: 2.49, weight: 1 }, // 1kg
   { id: 3, name: "Milk", section: "Dairy", price: 3.99, weight: 1 }, // 1L
@@ -124,8 +128,8 @@ export const groceriesData: RawGroceriesData[] = [
 ];
 
 // Computation would be done server side
-export const mappedGroceriesData = (): GroceriesData[] => {
-  function calculatePricePer100g(item: RawGroceriesData) {
+export const mappedGroceriesData = (): CalculatedGroceryItem[] => {
+  function calculatePricePer100g(item: GroceryItem) {
     const pricePer100g = (item.price / item.weight) * 0.1;
     return pricePer100g.toFixed(2);
   }
