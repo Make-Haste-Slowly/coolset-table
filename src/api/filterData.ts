@@ -11,15 +11,22 @@ export const filterData = async <T>({
   page,
   rowsPerPage,
 }: IQueryParams<T>): Promise<{ count: number; data: T[] }> => {
-  const mappedData: CalculatedGroceryItem[] = groceriesData.map((item) => ({
-    ...item,
-    pricePerWeight: calculatePricePerWeight(item),
-  }));
+  const mappedData: CalculatedGroceryItem[] = groceriesData
+    .filter((item) => {
+      const itemIsValid =
+        item.id && (item.name || item.section || item.price || item.weight);
+      return itemIsValid;
+    })
+    .map((item) => ({
+      ...item,
+      pricePerWeight: calculatePricePerWeight(item),
+    }));
 
   const filteredData =
     selectedSectionFilterOptions.length > 0
-      ? (mappedData.filter((item) =>
-          selectedSectionFilterOptions.includes(item.section)
+      ? (mappedData.filter(
+          (item) =>
+            item.section && selectedSectionFilterOptions.includes(item.section)
         ) as T[])
       : (mappedData as T[]);
 
