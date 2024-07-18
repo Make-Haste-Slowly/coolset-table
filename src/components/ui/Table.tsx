@@ -80,6 +80,7 @@ export default function Table<T extends DataType>({
                       {headCells.map((cell, i) => {
                         return (
                           <TableCell
+                            width={`${100 / headCells.length}%`}
                             key={cell.id as string}
                             component="th"
                             scope="row"
