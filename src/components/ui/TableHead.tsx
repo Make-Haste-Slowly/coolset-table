@@ -15,6 +15,7 @@ export interface HeadCell<T extends DataType> {
   id: keyof T;
   label: string;
   numeric: boolean;
+  width?: string;
 }
 
 interface TableHeadProps<T extends DataType> {
@@ -40,6 +41,7 @@ export default function EnhancedTableHead<T extends DataType>(
           <TableCell
             key={headCell.id as string}
             sortDirection={orderBy === headCell.id ? order : false}
+            width={headCell.width}
             sx={{
               borderLeft: i === 0 ? `1px solid rgba(224, 224, 224, 1)` : "none",
               borderBottom: `1px solid rgba(224, 224, 224, 1)`,

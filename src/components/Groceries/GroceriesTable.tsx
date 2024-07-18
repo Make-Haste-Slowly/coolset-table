@@ -20,24 +20,28 @@ const headCells: HeadCell<CalculatedGroceryItem>[] = [
     numeric: false,
     disablePadding: true,
     label: "Name",
+    width: "25%",
   },
   {
     id: "section",
     numeric: true,
     disablePadding: false,
     label: "Section",
+    width: "25%",
   },
   {
     id: "price",
     numeric: true,
     disablePadding: false,
     label: "Price (€)",
+    width: "25%",
   },
   {
     id: "pricePerWeight",
     numeric: true,
     disablePadding: false,
     label: "Price / 100g (€)",
+    width: "25%",
   },
 ];
 
