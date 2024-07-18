@@ -35,7 +35,7 @@ export const useFetchData = <T>({
       // Simulate a 0.5 second delay
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      const { data, count } = filterData<T>({
+      const { data, count } = await filterData<T>({
         selectedSectionFilterOptions,
         order,
         orderBy,

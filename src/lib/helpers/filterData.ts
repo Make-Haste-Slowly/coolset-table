@@ -3,13 +3,13 @@ import { IQueryParams } from "../hooks/fetchData";
 import { getComparator } from "./getComparator";
 import { stableSort } from "./stableSort";
 
-export const filterData = <T>({
+export const filterData = async <T>({
   selectedSectionFilterOptions,
   order,
   orderBy,
   page,
   rowsPerPage,
-}: IQueryParams<T>): { count: number; data: T[] } => {
+}: IQueryParams<T>): Promise<{ count: number; data: T[] }> => {
   const filteredData =
     selectedSectionFilterOptions.length > 0
       ? (mappedGroceriesData().filter((item) =>
