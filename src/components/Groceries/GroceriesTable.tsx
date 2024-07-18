@@ -7,8 +7,8 @@ import { Filter } from "../ui/Filter";
 import { HeadCell, Order } from "../ui/TableHead";
 
 import { getUniquePropertyValues } from "../../lib/helpers/getUniquePropertyValues";
-import { useFetchData } from "../../lib/hooks/fetchData";
-import { CalculatedGroceryItem, mappedGroceriesData } from "../../api/data";
+import { useFetchData } from "../../lib/hooks/useFetchData";
+import { CalculatedGroceryItem, groceriesData } from "../../api/data";
 
 const headCells: HeadCell<CalculatedGroceryItem>[] = [
   {
@@ -41,9 +41,10 @@ const DEFAULT_ROWS = 10;
 
 export const GroceriesTable = () => {
   const sectionFilterOptions = getUniquePropertyValues(
-    mappedGroceriesData(),
+    groceriesData,
     "section" as keyof CalculatedGroceryItem
   );
+
   const [selectedSectionFilterOptions, setSelectedFilterOptions] =
     React.useState<string[]>([]);
 
@@ -83,6 +84,7 @@ export const GroceriesTable = () => {
     property: keyof CalculatedGroceryItem
   ) => {
     const isAsc = orderBy === property && order === "asc";
+    setPage(0);
     refetch();
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);

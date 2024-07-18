@@ -1,5 +1,6 @@
-import { mappedGroceriesData } from "../../api/data";
-import { IQueryParams } from "../hooks/fetchData";
+import { CalculatedGroceryItem, groceriesData } from "../../api/data";
+import { IQueryParams } from "../hooks/useFetchData";
+import { calculatePricePerWeight } from "./calculatePricePerWeight";
 import { getComparator } from "./getComparator";
 import { stableSort } from "./stableSort";
 
@@ -10,12 +11,17 @@ export const filterData = async <T>({
   page,
   rowsPerPage,
 }: IQueryParams<T>): Promise<{ count: number; data: T[] }> => {
+  const mappedData: CalculatedGroceryItem[] = groceriesData.map((item) => ({
+    ...item,
+    pricePerWeight: calculatePricePerWeight(item),
+  }));
+
   const filteredData =
     selectedSectionFilterOptions.length > 0
-      ? (mappedGroceriesData().filter((item) =>
+      ? (mappedData.filter((item) =>
           selectedSectionFilterOptions.includes(item.section)
         ) as T[])
-      : (mappedGroceriesData() as T[]);
+      : (mappedData as T[]);
 
   const sortedData = stableSort<T>(
     filteredData,

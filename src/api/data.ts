@@ -125,15 +125,3 @@ export const groceriesData: GroceryItem[] = [
   }, // 1L
   { id: 56, name: "Trail Mix", section: "Snacks", price: 4.49, weight: 0.3 }, // 300g
 ];
-
-// Computation would be done server side
-export const mappedGroceriesData = (): CalculatedGroceryItem[] => {
-  function calculatePricePer100g(item: GroceryItem) {
-    const pricePer100g = (item.price / item.weight) * 0.1;
-    return pricePer100g.toFixed(2);
-  }
-  return groceriesData.map((item) => ({
-    ...item,
-    pricePerWeight: calculatePricePer100g(item),
-  }));
-};

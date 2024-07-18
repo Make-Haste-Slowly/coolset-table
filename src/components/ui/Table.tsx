@@ -43,7 +43,9 @@ export default function Table<T extends DataType>({
   onRequestSort,
 }: TableProps<T>) {
   const populatedRows = React.useMemo(() => data, [data]);
-  const rows = isLoading ? new Array(rowsPerPage).fill(0) : populatedRows;
+  const rows: T[] = isLoading
+    ? (new Array(rowsPerPage).fill({}).map((_, i) => ({ id: i })) as T[])
+    : populatedRows;
 
   return (
     <>
@@ -103,6 +105,7 @@ export default function Table<T extends DataType>({
                 })}
                 {!isLoading && populatedRows.length !== rowsPerPage && (
                   <TableRow
+                    key="empty-row"
                     sx={{
                       height:
                         53 * (ROWS_PER_PAGE_OPTIONS[0] - populatedRows.length),
