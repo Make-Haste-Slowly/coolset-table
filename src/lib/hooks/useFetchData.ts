@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { Order } from "../../components/ui/TableHead";
-import { filterData } from "../helpers/filterData";
+import { filterData } from "../../api/filterData";
 
 export interface IQueryParams<T> {
   page: number;

@@ -46,13 +46,13 @@ export const Filter: React.FC<FilterProps> = ({
     <div>
       <FormControl sx={{ width: 200 }}>
         <Select
-          labelId="demo-multiple-checkbox-label"
           id="demo-multiple-checkbox"
-          multiple
-          value={selectedOptions}
           displayEmpty
-          onChange={handleChange}
           input={<OutlinedInput />}
+          labelId="demo-multiple-checkbox-label"
+          multiple
+          onChange={handleChange}
+          value={selectedOptions}
           renderValue={(selected) => {
             if (selected.length === 0) {
               return (

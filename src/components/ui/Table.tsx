@@ -14,33 +14,33 @@ import EnhancedTableHead, { HeadCell, Order } from "./TableHead";
 import { DataType } from "../../api/data";
 
 interface TableProps<T extends DataType> {
-  isLoading: boolean;
-  data: T[];
   count: number;
+  data: T[];
   headCells: HeadCell<T>[];
-  page: number;
+  isLoading: boolean;
   order: Order;
   orderBy: keyof T;
-  rowsPerPage: number;
   onChangePage: (event: unknown, newPage: number) => void;
   onChangeRowsPerPage: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onRequestSort: (event: React.MouseEvent<unknown>, property: keyof T) => void;
+  page: number;
+  rowsPerPage: number;
 }
 
 const ROWS_PER_PAGE_OPTIONS = [10, 25, 50];
 
 export default function Table<T extends DataType>({
-  data,
   count,
+  data,
   headCells,
-  page,
   isLoading,
   order,
   orderBy,
-  rowsPerPage,
   onChangePage,
   onChangeRowsPerPage,
   onRequestSort,
+  page,
+  rowsPerPage,
 }: TableProps<T>) {
   const populatedRows = React.useMemo(() => data, [data]);
   const rows: T[] = isLoading
@@ -107,9 +107,9 @@ export default function Table<T extends DataType>({
                   <TableRow
                     key="empty-row"
                     sx={{
+                      border: "none",
                       height:
                         53 * (ROWS_PER_PAGE_OPTIONS[0] - populatedRows.length),
-                      border: "none",
                     }}
                   >
                     <TableCell
@@ -125,10 +125,10 @@ export default function Table<T extends DataType>({
           <TablePagination
             component="div"
             sx={{
-              padding: 0,
               border: "none",
               justifySelf: "left",
               marginRight: "auto",
+              padding: 0,
             }}
             rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
             count={count}
@@ -140,11 +140,11 @@ export default function Table<T extends DataType>({
         </>
       ) : (
         <Box
-          width="100%"
-          height="600px"
-          display="flex"
-          justifyContent="center"
           alignItems="center"
+          display="flex"
+          height="600px"
+          justifyContent="center"
+          width="100%"
         >
           <Alert severity="info">No Data</Alert>
         </Box>

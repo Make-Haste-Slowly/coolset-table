@@ -8,7 +8,11 @@ import { HeadCell, Order } from "../ui/TableHead";
 
 import { getUniquePropertyValues } from "../../lib/helpers/getUniquePropertyValues";
 import { useFetchData } from "../../lib/hooks/useFetchData";
-import { CalculatedGroceryItem, groceriesData } from "../../api/data";
+import {
+  CalculatedGroceryItem,
+  groceriesData,
+  GroceryItem,
+} from "../../api/data";
 
 const headCells: HeadCell<CalculatedGroceryItem>[] = [
   {
@@ -40,9 +44,9 @@ const headCells: HeadCell<CalculatedGroceryItem>[] = [
 const DEFAULT_ROWS = 10;
 
 export const GroceriesTable = () => {
-  const sectionFilterOptions = getUniquePropertyValues(
+  const sectionFilterOptions = getUniquePropertyValues<GroceryItem>(
     groceriesData,
-    "section" as keyof CalculatedGroceryItem
+    "section"
   );
 
   const [selectedSectionFilterOptions, setSelectedFilterOptions] =
@@ -75,7 +79,7 @@ export const GroceriesTable = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     refetch();
-    setRowsPerPage(parseInt(event.target.value, 10));
+    setRowsPerPage(parseInt(event.target.value, DEFAULT_ROWS));
     setPage(0);
   };
 
@@ -104,11 +108,11 @@ export const GroceriesTable = () => {
         }}
       >
         <Typography
-          sx={{ flex: "1 1 100%" }}
-          variant="h6"
           id="tableTitle"
           component="div"
+          sx={{ flex: "1 1 100%" }}
           textAlign="left"
+          variant="h6"
         >
           Today's Groceries
         </Typography>
@@ -121,25 +125,25 @@ export const GroceriesTable = () => {
       </Toolbar>
       {!error ? (
         <Table
-          data={data}
           count={count}
-          isLoading={isLoading}
+          data={data}
           headCells={headCells}
-          page={page}
+          isLoading={isLoading}
           order={order}
           orderBy={orderBy}
-          rowsPerPage={rowsPerPage}
           onChangePage={handleChangePage}
           onChangeRowsPerPage={handleChangeRowsPerPage}
           onRequestSort={handleRequestSort}
+          page={page}
+          rowsPerPage={rowsPerPage}
         />
       ) : (
         <Box
-          width="100%"
-          height="600px"
-          display="flex"
-          justifyContent="center"
           alignItems="center"
+          display="flex"
+          height="600px"
+          justifyContent="center"
+          width="100%"
         >
           <Alert severity="error">Error fetching groceries</Alert>
         </Box>

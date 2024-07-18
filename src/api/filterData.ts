@@ -1,8 +1,8 @@
-import { CalculatedGroceryItem, groceriesData } from "../../api/data";
-import { IQueryParams } from "../hooks/useFetchData";
-import { calculatePricePerWeight } from "./calculatePricePerWeight";
-import { getComparator } from "./getComparator";
-import { stableSort } from "./stableSort";
+import { CalculatedGroceryItem, groceriesData } from "./data";
+import { IQueryParams } from "../lib/hooks/useFetchData";
+import { calculatePricePerWeight } from "../lib/helpers/calculatePricePerWeight";
+import { getComparator } from "../lib/helpers/getComparator";
+import { stableSort } from "../lib/helpers/stableSort";
 
 export const filterData = async <T>({
   selectedSectionFilterOptions,
