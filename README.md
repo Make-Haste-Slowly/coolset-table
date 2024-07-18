@@ -15,7 +15,7 @@
 
 #### [View the deployed application here.](https://main--coolset-table.netlify.app/)
 
-#### [Click here to see the Video Review]([LINK_TO_LOOM_VIDEO])
+#### [Click here to see the Video Review](https://www.loom.com/share/2214aab07b0c413e9e700d3a6b3fe48f?sid=d5aaec26-7ba4-4f05-92a0-bf3454e1b5ef)
 
 ## Solutions / Considerations
 
