@@ -3,7 +3,7 @@ import { Alert, Box, Typography } from "@mui/material";
 import Toolbar from "@mui/material/Toolbar";
 
 import Table from "../ui/Table";
-import { Filter } from "../ui/Filter";
+import Filter from "../ui/Filter";
 import { HeadCell, Order } from "../ui/TableHead";
 
 import { getUniquePropertyValues } from "../../lib/helpers/getUniquePropertyValues";
@@ -48,10 +48,9 @@ const headCells: HeadCell<CalculatedGroceryItem>[] = [
 const DEFAULT_ROWS = 10;
 
 export const GroceriesTable = () => {
-  const sectionFilterOptions = getUniquePropertyValues<GroceryItem>(
-    groceriesData,
-    "section"
-  );
+  const sectionFilterOptions = React.useRef(
+    getUniquePropertyValues<GroceryItem>(groceriesData, "section")
+  ).current;
 
   const [selectedSectionFilterOptions, setSelectedFilterOptions] =
     React.useState<string[]>([]);
@@ -74,6 +73,8 @@ export const GroceriesTable = () => {
       },
     });
 
+  const refetchRef = React.useRef(refetch).current;
+
   const handleChangePage = (event: unknown, newPage: number) => {
     refetch();
     setPage(newPage);
@@ -87,21 +88,24 @@ export const GroceriesTable = () => {
     setPage(0);
   };
 
-  const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
-    property: keyof CalculatedGroceryItem
-  ) => {
-    const isAsc = orderBy === property && order === "asc";
-    setPage(0);
-    refetch();
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
-  };
+  const handleRequestSort = React.useCallback(
+    (
+      event: React.MouseEvent<unknown>,
+      property: keyof CalculatedGroceryItem
+    ) => {
+      const isAsc = orderBy === property && order === "asc";
+      setPage(0);
+      refetchRef();
+      setOrder(isAsc ? "desc" : "asc");
+      setOrderBy(property);
+    },
+    [order, orderBy, refetchRef]
+  );
 
-  const handleSelectFilterOptions = (options: string[]) => {
+  const handleSelectFilterOptions = React.useCallback((options: string[]) => {
     setPage(0);
     setSelectedFilterOptions(options);
-  };
+  }, []);
 
   return (
     <Box sx={{ width: "100%" }}>

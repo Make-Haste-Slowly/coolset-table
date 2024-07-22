@@ -1,3 +1,6 @@
+//  The stableSort function performs a stable sort on an array, meaning that it sorts the array in such a way
+// that elements that are equal according to the comparator function maintain their original relative order.
+
 export function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
   const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
   stabilizedThis.sort((a, b) => {

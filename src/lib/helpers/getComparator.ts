@@ -1,3 +1,4 @@
+// This function compares two objects (a and b) based on the value of a specified property (orderBy) in descending order.
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -8,6 +9,7 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   return 0;
 }
 
+// This function returns a comparator function tailored to the specified sort order (order) and property (orderBy). The comparator can be used for sorting arrays of objects.
 export function getComparator<Key extends keyof any>(
   order: any,
   orderBy: any

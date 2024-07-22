@@ -25,14 +25,14 @@ interface TableHeadProps<T extends DataType> {
   orderBy: string;
 }
 
-export default function EnhancedTableHead<T extends DataType>(
-  props: TableHeadProps<T>
-) {
+function EnhancedTableHead<T extends DataType>(props: TableHeadProps<T>) {
   const { order, orderBy, onRequestSort } = props;
-  const createSortHandler =
+  const createSortHandler = React.useCallback(
     (property: keyof T) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
-    };
+    },
+    [onRequestSort]
+  );
 
   return (
     <TableHead>
@@ -67,3 +67,5 @@ export default function EnhancedTableHead<T extends DataType>(
     </TableHead>
   );
 }
+
+export default React.memo(EnhancedTableHead) as typeof EnhancedTableHead;

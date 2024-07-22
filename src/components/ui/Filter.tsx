@@ -26,12 +26,16 @@ const MenuProps = {
   },
 };
 
-export const Filter: React.FC<FilterProps> = ({
+const Filter: React.FC<FilterProps> = ({
   options,
   placeholder,
   selectedOptions,
   setSelectedOptions,
 }) => {
+  console.log("options:", options);
+  console.log("placeholder:", placeholder);
+  console.log("selectedOptions:", selectedOptions);
+  console.log("setSelectedOptions:", setSelectedOptions);
   const handleChange = (event: SelectChangeEvent<typeof selectedOptions>) => {
     const {
       target: { value },
@@ -78,3 +82,5 @@ export const Filter: React.FC<FilterProps> = ({
     </div>
   );
 };
+
+export default React.memo(Filter);
